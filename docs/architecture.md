@@ -1,47 +1,31 @@
-# SMK Platform Repository
+# Architecture Overview
 
-## Overview
-SM Kelponaukenclaw Platform — Technical Infrastructure Foundation
+## Philosophy
+We build and prove things on ourselves first, then package and sell them to businesses with zero digital footprint.
 
-This is a clean starter repository for building technical products with automated testing, linting, and deployment.
+## Key Components
 
-## Repository Contents
+### 1. Agent Framework
+- Modular architecture
+- Plugin-based capabilities
+- Async-first design
 
-| Path | Description |
-|------|-------------|
-| `README.md` | Project overview |
-| `LICENSE` | MIT License |
-| `.gitignore` | Git ignore rules |
-| `requirements.txt` | Runtime dependencies |
-| `requirements-dev.txt` | Development dependencies |
-| `pyproject.toml` | Tool configurations |
-| `Makefile` | Automation recipes |
-| `CONTRIBUTING.md` | Contribution guidelines |
-| `CODE_OF_CONDUCT.md` | Code of conduct |
-| `CHANGELOG.md` | Changelog |
-| `src/` | Source code |
-| `tests/` | Test suite |
-| `docs/` | Documentation |
-| `config/` | Configuration templates |
-| `.github/` | GitHub workflows and templates |
+### 2. CI/CD Pipeline
+- GitHub Actions for testing and deployment
+- Multi-version Python testing
+- Automated dependency updates
 
-## Development Setup
+### 3. Storage Strategy
+- All AI work on D: drive
+- C: drive minimized
+- Persistent configuration in D:/Hermes/Config
 
-```bash
-# Install dependencies
-make install
+## Tech Stack
+- **Language**: Python 3.11+
+- **Testing**: pytest
+- **Linting**: ruff, mypy
+- **CI/CD**: GitHub Actions
+- **Packaging**: setuptools
 
-# Run tests
-make test
-
-# Run linter
-make lint
-
-# Format code
-make format
-```
-
-## CI/CD Status
-![CI](https://github.com/smkalpanaopenclaw-a11y/smk-platform/actions/workflows/ci.yml/badge.svg)
-![Tests](https://github.com/smkalpanaopenclaw-a11y/smk-platform/actions/workflows/testing.yml/badge.svg)
-![Deploy](https://github.com/smkalpanaopenclaw-a11y/smk-platform/actions/workflows/deployment.yml/badge.svg)
+## Development Environment
+See `.env.example` for required environment variables.
