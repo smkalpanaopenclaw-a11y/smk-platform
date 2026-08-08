@@ -1,0 +1,1 @@
+"""SMK Platform tests package."""
