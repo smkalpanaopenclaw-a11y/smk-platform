@@ -1,66 +1,49 @@
 # Contributing to SM Kelponaukenclaw Platform
 
-We welcome contributions! Please follow these steps:
+Thanks for your interest in contributing! This project follows a **build-first, prove-it, then package** philosophy.
 
-## Development Environment Setup
+## Getting Started
 
 1. Fork the repository
-2. Clone your fork (`git clone https://github.com/YOUR_USERNAME/smk-platform.git`)
-3. Create a virtual environment:
+2. Clone your fork:
    ```bash
-   python -m venv .venv
-   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+   git clone https://github.com/YOUR_USERNAME/smk-platform.git
+   cd smk-platform
    ```
-4. Install dependencies:
+3. Install dependencies:
    ```bash
-   pip install -r requirements-dev.txt
+   make install
+   ```
+4. Run tests:
+   ```bash
+   make test
    ```
 
 ## Branching Strategy
+- `main` — Production-ready code (protected)
+- `develop` — Integration branch for features
+- `feature/JIRA-123-description` — New features
+- `hotfix/JIRA-123-description` — Urgent fixes
 
-We follow a **GitHub Flow + Release Strategy**:
-
-- `main` — production-ready code only
-- Feature branches (`feature/JIRA-123-short-description`)
-- Hotfix branches (`hotfix/issue-name`)
-
-Every pull request must:
-1. Pass all CI checks
-2. Have at least one code review
-3. Include tests for new functionality
-4. Update documentation if needed
-
-## Code Standards
-
-- Follow PEP 8 (Python) or relevant language conventions
-- Write descriptive commit messages using conventional commits:
-  ```
-  feat(auth): add login endpoint
-  fix(api): handle null pointer exception
-  docs(readme): update setup instructions
-  ```
-
-## Pull Requests
-
-1. Open draft PR early for visibility
-2. Mark as ready for review when complete
-3. Address all review comments
-4. Squash commits before merging
-
-## Testing
-
-Run tests with:
-```bash
-make test
+## Commit Convention
+Follow [Conventional Commits](https://www.conventionalcommits.org/):
+```
+feat(agent): add email monitoring capability
+fix(ci): resolve test timeout issue
+docs(readme): update API documentation
 ```
 
-Coverage must remain above 80%.
+## Pull Requests
+1. Open PR against `develop` for features, `main` for hotfixes
+2. Ensure all CI checks pass
+3. Get at least one approval
+4. Squash and merge
 
-## Code of Conduct
-
-See [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for details.
+## Code Standards
+- Python 3.11+
+- Follow PEP 8
+- Write tests for all new functionality
+- Document public interfaces
 
 ## Questions?
-
-Join our community Discord: [discord.gg/kelponaukenclaw](https://discord.gg/kelponaukenclaw)
-Or open an issue with the `question` label.
+Join our [Discord](https://discord.gg/agency) or open an issue with the `question` label.
