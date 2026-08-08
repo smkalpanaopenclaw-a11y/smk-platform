@@ -1,37 +1,20 @@
-# SM Kelponaukenclaw Platform — Project Structure
+# Repository Documentation
 
-## Directory Layout
+## Project Structure
 ```
 smk-platform/
-├── README.md              # Project overview
-├── LICENSE                # MIT License
-├── .gitignore             # Environment + OS ignore rules
-├── requirements.txt       # Runtime dependencies
-├── requirements-dev.txt   # Dev/test dependencies
-├── pyproject.toml         # Tool configs (black, ruff, mypy)
-├── Makefile               # Automation recipes
-├── CHANGELOG.md           # Version history
-├── CONTRIBUTING.md        # How to contribute
-├── CODE_OF_CONDUCT.md     # Behavioral standards
-│
 ├── src/                   # Source code
-│   └── __init__.py
-│   └── app.py
-│
-├── tests/                 # Unit/integration tests
-│   └── __init__.py
-│
+├── tests/                 # Tests
 ├── docs/                  # Documentation
-│   └── README.md
-│
-└── .github/               # GitHub-specific config
-    ├── workflows/         # CI/CD workflows
-    ├── ISSUE_TEMPLATE/     # Issue templates
-    └── dependabot.yml     # Automated dependency updates
+├── config/                # Configuration files
+├── .github/               # GitHub workflows and templates
+├── Makefile               # Automation recipes
+├── pyproject.toml         # Project configuration
+└── requirements*.txt      # Dependencies
 ```
 
-## Conventions
-- All source code lives under `src/`
-- Tests live under `tests/` and mirror source structure
-- Each module should have its own test file (`test_module.py`)
-- Keep docs updated with new features in `docs/`
+## Key Documents
+- [Architecture Overview](architecture.md)
+- [Branching Strategy](branching-strategy.md)
+- [Project Management](project-management.md)
+- [CI/CD Configuration](../.github/README.md)

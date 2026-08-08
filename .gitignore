@@ -1,15 +1,18 @@
-# Byte-compiled / optimized / DLL files
+# Configuration
+.env
+
+# Logs
+*.log
+
+# Python
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
-
-# Distribution / packaging
 .Python
 build/
 develop-eggs/
 dist/
-downloads/
 eggs/
 .eggs/
 lib/
@@ -41,12 +44,6 @@ cover/
 *.mo
 *.pot
 
-# Django
-*.log
-local_settings.py
-db.sqlite3
-db.sqlite3-journal
-
 # Flask
 instance/
 .webassets-cache
@@ -70,9 +67,6 @@ ipython_config.py
 !profile_default/ipython_config.py
 !profile_default/startup/
 !profile_default/startup/README.rst
-
-# PEP 582
-__pods__/
 
 # Environments
 .env

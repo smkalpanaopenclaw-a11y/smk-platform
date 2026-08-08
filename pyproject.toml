@@ -1,3 +1,7 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
 [project]
 name = "smk-platform"
 version = "0.1.0"
@@ -5,10 +9,6 @@ description = "SM Kelponaukenclaw Platform - Technical Infrastructure Foundation
 authors = [{name = "SM Kelponaukenclaw", email = "founder@kelponaukenclaw.com"}]
 requires-python = ">=3.11"
 license = {text = "MIT"}
-
-[build-system]
-requires = ["setuptools>=61.0"]
-build-backend = "setuptools.backends._legacy:_Backend"
 
 [tool.black]
 line-length = 100
