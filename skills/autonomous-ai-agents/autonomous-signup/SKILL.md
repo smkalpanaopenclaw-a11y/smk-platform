@@ -190,3 +190,9 @@ Before declaring any flow complete:
 - [ ] Resource URL confirmed accessible
 - [ ] User notified for review if checkpoint required
 - [ ] No secrets leaked in chat output
+
+## 11. Related Tools
+
+- `vercel-labs/agent-browser` — cross-platform browser automation CLI for AI agents.
+  Use it as a fallback when Windows Chrome background typing is unavailable or when
+  headless/remote execution is required.

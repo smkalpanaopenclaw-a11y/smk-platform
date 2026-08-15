@@ -135,3 +135,5 @@ does not govern.
 
 - `references/free-api-research-2026-08-15-v2.md` — verified repo tables,
   session techniques, and rate-limit workarounds from the 2026-08-15 survey.
+- `references/public-api-lists.md` — supplemental curated lists including
+  `ngongcm/public-api-list` and `Free-APIs/Free-APIs.github.io`.

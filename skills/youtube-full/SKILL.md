@@ -208,6 +208,61 @@ User-Agent: YourAgent/1.0
 
 Free tier: 100 credits, 300 req/min. Starter ($5/mo): 1,000 credits.
 
+## Output Modes
+
+### Standard API Mode
+Use TranscriptAPI as shown above. This is the default and recommended path.
+
+### Structured Report Mode
+Generate a structured HTML/markdown report from a transcript:
+- executive summary
+- key points
+- analysis
+- takeaway
+- timestamped topic outline
+- embedded in-page player when possible
+
+This mode is useful when the user asks for a report, presentation, or study notes rather than raw transcript text.
+
+### Local Fallback Mode
+If TranscriptAPI is unavailable, rate-limited, or the video is blocked, fall back to local extraction only when the host has `yt-dlp` available.
+
+**Windows check:**
+```powershell
+yt-dlp --version
+ffmpeg -version
+```
+
+**Local transcript fallback:**
+```bash
+yt-dlp --print-json --no-download --skip-download --write-subs --sub-langs en --sub-format srt VIDEO_URL
+```
+
+**Notes:**
+- Local fallback requires `yt-dlp` and optionally `ffmpeg`.
+- This mode does not consume TranscriptAPI credits.
+- Some videos may still block cloud IPs even locally; report failures explicitly instead of retrying blindly.
+
+## Advanced: Study Notes / Analysis
+
+When the user asks for deeper analysis, support these derived outputs from a fetched transcript:
+- TL;DR and takeaways
+- chapters / topic outline with timestamps
+- belief archaeology / worldview extraction prompts
+- follow-up Q&A over the transcript content
+
+Do not re-download the transcript for each analysis mode. Fetch once, then derive multiple outputs from the cached text.
+
+## Advanced: Bulk Transcripts
+
+For playlists or channel-wide requests:
+1. Enumerate videos with playlist/channel endpoints
+2. Fetch transcripts sequentially with explicit delays to respect rate limits
+3. Cache results in the session context to avoid duplicate API calls
+4. Summarize per-video and provide a combined index
+
+Do not silently truncate bulk jobs. If credits or rate limits are likely to be exceeded, stop and report the estimated cost before continuing.
+
 ## Copy-paste examples
 
 Every request in this file as a ready-to-run one-liner: [references/curl-examples.md](references/curl-examples.md)
