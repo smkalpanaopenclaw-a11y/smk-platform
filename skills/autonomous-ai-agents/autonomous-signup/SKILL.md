@@ -53,8 +53,64 @@ PROVIDER_API_KEY_OPENROUTER=...
 
 ## 3. Browser Automation Workflow
 
-Use `windows-browser-control` skill for Chrome automation. The exact
-sequence for any signup/login flow:
+### 3.1 Preferred backend on Windows: Playwright headless
+
+On this host, Playwright headless Chromium is the reliable path. Use it
+as the **first choice** for signup/login flows.
+
+**Minimal pattern:**
+```python
+from playwright.sync_api import sync_playwright
+from pathlib import Path
+
+vault = Path('D:/Hermes/agency/vault/agent-identity.env')
+email = next(line.split('=',1)[1].strip() for line in vault.read_text().splitlines() if line.startswith('AGENT_EMAIL='))
+out = Path('D:/Hermes/agency/evidence')
+out.mkdir(parents=True, exist_ok=True)
+
+with sync_playwright() as p:
+    browser = p.chromium.launch(headless=True)
+    ctx = browser.new_context(viewport={'width': 1280, 'height': 800})
+    page = ctx.new_page()
+    page.goto('https://example.com/signup', wait_until='networkidle', timeout=60000)
+    page.screenshot(path=str(out / 'example-signup-1.png'), full_page=False)
+
+    # Optional cookie banner dismiss
+    for txt in ['Accept All', 'Accept', 'Agree', 'OK']:
+        try:
+            page.click(f"button:has-text('{txt}')", timeout=3000)
+            page.screenshot(path=str(out / 'example-signup-2.png'), full_page=False)
+            break
+        except Exception:
+            pass
+
+    # Fill email
+    page.locator('input[type="email"], input[name="email"], input#email, input[placeholder*="email" i]').first.fill(email)
+    page.screenshot(path=str(out / 'example-signup-3.png'), full_page=False)
+
+    # Click primary action if present
+    for txt in ['Continue with email', 'Sign up', 'Continue', 'Next']:
+        try:
+            page.click(f"button:has-text('{txt}')", timeout=5000)
+            page.wait_for_load_state('networkidle', timeout=60000)
+            page.screenshot(path=str(out / 'example-signup-4.png'), full_page=False)
+            break
+        except Exception:
+            continue
+
+    browser.close()
+```
+
+**Rules**:
+- Save every meaningful state as a screenshot in `D:\Hermes\agency\evidence\`.
+- Use vision analysis on screenshots when needed.
+- Do not bypass CAPTCHA, SMS, or email verification silently.
+- Stop and report at every human checkpoint.
+
+### 3.2 Fallback backend: Windows Chrome via computer_use
+
+Only use when Playwright is unavailable or provider explicitly requires
+a logged-in Chrome session.
 
 1. **Focus Chrome**: `focus_app(app='Google Chrome', delivery_mode='background')`
 2. **Capture state**: `capture(mode='som')` to discover elements
@@ -65,8 +121,7 @@ sequence for any signup/login flow:
 7. **Verify**: capture fresh state and confirm success by visible text
 8. **Evidence**: save screenshot path and page text to the report
 
-### 3.1 Foreground vs Background
-
+#### 3.2.1 Foreground vs Background
 - **Background input** is preferred but often dropped for text fields
   on Windows Chrome. If `type` returns `background_unavailable`,
   retry with `delivery_mode='foreground'`.
@@ -74,8 +129,7 @@ sequence for any signup/login flow:
 - If foreground is rejected by Windows foreground-lock, call
   `focus_app` first, then retry foreground.
 
-### 3.2 Long Form Paste
-
+#### 3.2.2 Long Form Paste
 If typing truncates or queues, use the clipboard pattern:
 
 ```powershell
@@ -173,6 +227,7 @@ Next: <what user should do>
 - **Email verification required**: report inbox to check, resume after user confirms.
 - **Rate limited**: wait 60s, retry once, then pivot to alternative provider.
 - **Foreground lock**: focus_app then retry foreground; if still blocked, ask user to bring Chrome forward briefly.
+- **Playwright install missing**: run `python -m pip install playwright && python -m playwright install chromium`
 
 ## 9. Security Rules
 
@@ -196,3 +251,4 @@ Before declaring any flow complete:
 - `vercel-labs/agent-browser` — cross-platform browser automation CLI for AI agents.
   Use it as a fallback when Windows Chrome background typing is unavailable or when
   headless/remote execution is required.
+- Playwright — primary backend on Windows for headless signup/login flows.
