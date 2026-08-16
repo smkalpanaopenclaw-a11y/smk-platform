@@ -112,6 +112,10 @@ with sync_playwright() as p:
 Only use when Playwright is unavailable or provider explicitly requires
 a logged-in Chrome session.
 
+**Resume-first rule**: if Chrome was restarted after a power cut or crash,
+call `list_windows(pid=<latest pid>)` and use the returned `window_id` for
+all subsequent captures/clicks. Do not reuse old window handles.
+
 1. **Focus Chrome**: `focus_app(app='Google Chrome', delivery_mode='background')`
 2. **Capture state**: `capture(mode='som')` to discover elements
 3. **Navigate**: click address bar, type URL, press Enter
@@ -129,14 +133,38 @@ a logged-in Chrome session.
 - If foreground is rejected by Windows foreground-lock, call
   `focus_app` first, then retry foreground.
 
-#### 3.2.2 Long Form Paste
+#### 3.2.2 Stale-Element Recovery
+- After navigation, modal close, or failed click, element indices often
+  become invalid. **Always re-capture** before retrying the same action.
+- Use `capture(mode='som')` to refresh the element cache.
+- Do not retry a stale element index without a fresh capture.
+
+#### 3.2.3 Keyboard-First Form Navigation
+- For radio buttons, checkboxes, or preset selectors that ignore clicks:
+  tab to the control and use `key('space')`.
+- For long forms: tab order is usually more reliable than blind clicking.
+- For permission trees: use clipboard-paste search filtering, then Space
+  to toggle checkboxes.
+
+#### 3.2.4 Long Form Paste
 If typing truncates or queues, use the clipboard pattern:
 
 ```powershell
-powershell -Command "Set-Clipboard -Path 'D:\\Hermes\\agent_form.txt'"
+powershell -Command "Set-Clipboard -Value 'text'"
 ```
 
 Then focus input, `ctrl+a`, `ctrl+v`, send once, and verify.
+
+#### 3.2.5 Misclick Recovery
+- If a click opens an unrelated page, use `browser_back` or the Chrome
+  back button to return.
+- Do not restart the entire flow; recover in-place.
+- Re-capture after back navigation to refresh stale elements.
+
+#### 3.2.6 Dangerous Modal Cancellation
+- If a modal asks "Select all permissions?" or similar bulk-grant prompt,
+  cancel it immediately.
+- Over-scoping breaks least-privilege and may void provider terms.
 
 ## 4. GitHub Flows
 

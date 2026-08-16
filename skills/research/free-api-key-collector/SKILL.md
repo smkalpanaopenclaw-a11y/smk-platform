@@ -116,6 +116,62 @@ session.
 - If the user already has a closely related skill, prefer extending it instead
   of creating a narrow duplicate.
 
+## 7. Google Social Login Block
+
+Some providers use Google OAuth as the only signup path. On Windows
+automation profiles, Google may reject the login with:
+
+```
+Couldn't sign you in — This browser or app may not be secure
+```
+
+This is a Google-side policy block for headless/automation contexts. It
+cannot be bypassed from Playwright or a fresh Chrome profile.
+
+**Recommended handling:**
+- Record the provider as `blocked_by_google` in the status tracker.
+- Do not retry the same Google OAuth flow more than once.
+- If the provider offers email/password signup, pivot to that path.
+- Otherwise, flag for manual user completion and continue with other
+  providers.
+
+## 8. Power-Cut / Crash Resume
+
+If the host reboots or the browser crashes mid-flow:
+1. Re-list Chrome windows via `list_windows(pid=<latest pid>)` and use the
+   returned `window_id` for all subsequent actions.
+2. Read the provider status file to determine the last known state.
+3. Resume from the current provider and step; do not restart from scratch.
+4. Re-capture before every retry to avoid stale-element failures.
+
+## 9. Minimal-Scope API Key Provisioning
+
+When this skill is used to collect keys for sub-agents:
+- Select the least-privilege preset or custom scope the provider allows.
+- Avoid bulk-grant modals; cancel "Select all permissions?" immediately.
+- Document the exact scope configuration in `references/api-token-design.md`.
+- Record keys in the vault immediately after creation; do not batch saves.
+
+## 10. Status Tracking
+
+Maintain `D:\Hermes\agency\evidence\status.json` during long collection
+runs:
+
+```json
+{
+  "providers": {
+    "mistral": {"keys": 1, "target": 2, "state": "in_progress"},
+    "nvidia": {"keys": 1, "target": 2, "state": "in_progress"},
+    "huggingface": {"keys": 0, "target": 2, "state": "pending"},
+    "cloudflare": {"keys": 0, "target": 2, "state": "pending"},
+    "groq": {"keys": 0, "target": 2, "state": "blocked_by_google"}
+  },
+  "last_updated": "2026-08-17T..."
+}
+```
+
+Update after every key creation so the run can resume after interruption.
+
 ## 7. Cross-Cutting Rule
 
 This skill is additive. It does not modify `research-toolkit` behavior; it
